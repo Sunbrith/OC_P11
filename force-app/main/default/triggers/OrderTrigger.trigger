@@ -19,5 +19,4 @@ trigger OrderTrigger on Order (after insert, before update, after delete) {
     if(trigger.isDelete){
         OrderOnAccountStatus.(Trigger.old);
     }
-
 }
