@@ -27,7 +27,7 @@ public with sharing class OrderOnAccountStatus {
 
             //if there's no product on order and status changes from 'Draft' to 'Active' an error 
             //message will be displayed and status update will be blocked
-            if (resultList.size() == 0 && old.Order.Status == 'Draft' && ord.Status == 'Active'){
+            if (resultList.size() == 0 && oldOrder.Status == 'Draft' && ord.Status == 'Active'){
                 ord.addError('The order must have at least one product');
             }  
 
@@ -42,4 +42,43 @@ public with sharing class OrderOnAccountStatus {
     // deactivate custom field active__c
     // on deletion of an order verify that the list of orders is empty 
     // if there are 0 orders untick/deactivate the field
+
+    public static void updateActiveCheckbox(List<Order> listOfOrders){
+
+        // Create a map with Accounts and its Id's 
+		map<id, Account> updateMap =new Map<id, Account>();
+        // Create a set with order ID
+		set<ID> ordset =new Set<ID>();
+
+		// Loop through the list of Orders concerned by the trigger
+		for (Order ord :listOfOrders){
+			if (ord.AccountId !=null)
+				ordset.add(ord.AccountId);
+		}
+		// Create list and query orders
+		List<Order> ResultList =[SELECT AccountId, Account.Active__c
+		                           FROM Order
+		                          WHERE AccountId IN :ordset];
+
+		// If there are orders attached to Account and Active__c field is equal to true, 
+        // the checkbox stays checked
+		if (ResultList !=null && ResultList.size() >0){
+			for (Order res :ResultList){
+				Account acc =new Account();
+				acc.Id =(id)res.get('AccountId');
+				acc.Active__c =true;
+				updateMap.put(acc.Id, acc);
+			}
+
+		// If there are no orders attached to Account, the checkbox is unchecked
+		} else{
+			for (id idSet :ordset){
+				Account acc =new Account();
+				acc.Id =idSet;
+				acc.Active__c =false;
+				updateMap.put(acc.Id, acc);
+			}
+		}
+		update updateMap.values();
+	}
 }

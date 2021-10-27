@@ -6,11 +6,11 @@
 */
 
 
-trigger OrderTrigger on Order (after insert, before update, after delete) {
+trigger OrderTrigger on Order (before update, after delete) {
 
-        if(trigger.isInsert){
-        OrderOnAccountStatus.verifyOrderOnAccount(Trigger.new);
-    }
+        //if(trigger.isInsert){
+       //OrderOnAccountStatus.verifyOrderOnAccount(Trigger.new);
+    //}
 
     if(trigger.isUpdate){
         OrderOnAccountStatus.verifyOrderOnAccount(Trigger.new);
