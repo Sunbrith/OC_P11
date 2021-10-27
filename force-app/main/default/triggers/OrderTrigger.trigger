@@ -12,11 +12,11 @@ trigger OrderTrigger on Order (before update, after delete) {
        //OrderOnAccountStatus.verifyOrderOnAccount(Trigger.new);
     //}
 
-    if(trigger.isUpdate){
+    if(Trigger.IsBefore && Trigger.isUpdate){
         OrderOnAccountStatus.verifyOrderOnAccount(Trigger.new);
     }
 
-    if(trigger.isDelete){
-        OrderOnAccountStatus.(Trigger.old);
+    if(Trigger.IsAfter && Trigger.isDelete){
+        OrderOnAccountStatus.updateActiveCheckbox(Trigger.old);
     }
 }

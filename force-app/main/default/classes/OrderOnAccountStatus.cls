@@ -1,10 +1,8 @@
 /**
 * Name: OrderOnAccountStatus
 * Description: This handler class has 2 features:
-* 1: Display an error message when status chages from 'Draft' to 'Active' 
-* when there are no products on the order  
-* 2:
-*
+* 1/Display an error message if status changes from 'Draft' to 'Active' and if there is no Order Products linked to the Order
+* 2/Update Active__c checkbox field of Accounts if there are orders linked to the account or not (true if orders and false if no order)
 * Author: Solbritt ANDERSEN
 * Date: 08/10/2021
 */
@@ -30,18 +28,8 @@ public with sharing class OrderOnAccountStatus {
             if (resultList.size() == 0 && oldOrder.Status == 'Draft' && ord.Status == 'Active'){
                 ord.addError('The order must have at least one product');
             }  
-
         }
-        
-                  
-    
-    }
-
-
-    //FUNCTION 2:
-    // deactivate custom field active__c
-    // on deletion of an order verify that the list of orders is empty 
-    // if there are 0 orders untick/deactivate the field
+     }
 
     public static void updateActiveCheckbox(List<Order> listOfOrders){
 
@@ -64,7 +52,7 @@ public with sharing class OrderOnAccountStatus {
         // the checkbox stays checked
 		if (ResultList !=null && ResultList.size() >0){
 			for (Order res :ResultList){
-				Account acc =new Account();
+				Account acc = new Account();
 				acc.Id =(id)res.get('AccountId');
 				acc.Active__c =true;
 				updateMap.put(acc.Id, acc);
@@ -73,7 +61,7 @@ public with sharing class OrderOnAccountStatus {
 		// If there are no orders attached to Account, the checkbox is unchecked
 		} else{
 			for (id idSet :ordset){
-				Account acc =new Account();
+				Account acc = new Account();
 				acc.Id =idSet;
 				acc.Active__c =false;
 				updateMap.put(acc.Id, acc);
