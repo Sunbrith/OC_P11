@@ -44,7 +44,7 @@ global class BatchCreateTask implements Database.Batchable<sObject>, Database.St
 			task.ReminderDateTime = system.today()+5;
 			taskList.add(task);
 			// Count of records processed
-			recordsProcessed = recordsProcessed + 1;
+			recordsProcessed = recordsProcessed + 200;
 		}
 		// If there is no order and no task (Subject='call') insert a new task
 		if (taskList.size() > 0){

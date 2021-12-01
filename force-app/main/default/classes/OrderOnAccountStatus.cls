@@ -26,7 +26,7 @@ public with sharing class OrderOnAccountStatus {
             //if there's no product on order and status changes from 'Draft' to 'Active' an error 
             //message will be displayed and status update will be blocked
             if (resultList.size() == 0 && oldOrder.Status == 'Draft' && ord.Status == 'Active'){
-                ord.addError('The order must have at least one product');
+                ord.addError('An order must have at least one product');
             }  
         }
      }

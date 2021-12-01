@@ -8,10 +8,7 @@
 
 trigger OrderTrigger on Order (before update, after delete) {
 
-        //if(trigger.isInsert){
-       //OrderOnAccountStatus.verifyOrderOnAccount(Trigger.new);
-    //}
-
+    
     if(Trigger.IsBefore && Trigger.isUpdate){
         OrderOnAccountStatus.verifyOrderOnAccount(Trigger.new);
     }
