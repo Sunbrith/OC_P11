@@ -1,4 +1,26 @@
 @isTest
+// private class OrderOnAccountStatus_Test{
+// 	@isTest
+// 	static void testVerifyOrderOnAccountBeforeUpdate(){
+// 		// Retrieve data set from TestDataFactory class : 1 Account, 1 Contract and 1 Order
+// 		TestDataFactory.createTestRecordsForVerifyOrderOnAccount(1, 1, 1);
+// 		Test.startTest();
+// 		// Update Status on Order to 'Active' to catch exception
+// 		List<Order> ords =[SELECT Id, Status
+// 		                   FROM Order
+// 						   WHERE Startdate = '2021-11-09'
+// 						   ];
+// 		for (Order con :ords){
+// 			con.Status ='Active';
+// 		}
+// 		try{
+// 			update ords;
+// 		} catch (Exception e){
+// 			// Verify that the trigger is correctly fired with error message
+// 			system.Assert(e.getMessage().contains('Update failed'));
+// 		}
+// 		Test.stopTest();
+// 	}
 private class OrderOnAccountStatus_Test{
 	@isTest
 	static void testVerifyOrderOnAccountBeforeUpdate(){
@@ -7,17 +29,16 @@ private class OrderOnAccountStatus_Test{
 		Test.startTest();
 		// Update Status on Order to 'Active' to catch exception
 		List<Order> ords =[SELECT Id, Status
-		                   FROM Order
-						   WHERE Startdate = '2021-12-09'
-						   ];
+		                   FROM Order];
 		for (Order con :ords){
 			con.Status ='Active';
 		}
 		try{
 			update ords;
 		} catch (Exception e){
+            system.debug('exception : ' + e.getMessage()); 
 			// Verify that the trigger is correctly fired with error message
-			system.Assert(e.getMessage().contains('An order must have at least one product'));
+			system.Assert(e.getMessage().contains('Update failed'));
 		}
 		Test.stopTest();
 	}
